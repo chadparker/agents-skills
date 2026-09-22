@@ -1,15 +1,19 @@
 ---
-description: |
-    Manage stacked branches and pull requests with the gh-stack GitHub CLI extension. Use when the user wants to create, push, rebase, sync, navigate, or view stacks of dependent PRs. Triggers on tasks involving stacked diffs, dependent pull requests, branch chains, or incremental code review workflows.
-metadata:
-    author: github
-    github-path: skills/gh-stack
-    github-ref: refs/tags/v0.1.0
-    github-repo: https://github.com/github/gh-stack
-    github-tree-sha: c95c8b5b4dd850f3fef007b304428f5684f2fb87
-    version: 0.0.9
 name: gh-stack
+description: >
+  Manage stacked branches and pull requests with the gh-stack GitHub CLI extension.
+  Use when the user wants to create, push, rebase, sync, navigate, or view stacks of
+  dependent PRs. Triggers on tasks involving stacked diffs, dependent pull requests,
+  branch chains, or incremental code review workflows.
+metadata:
+  author: GitHub
+  source: https://github.com/github/gh-stack/blob/a1b4a3d4d0bcde9ec3a78ab99b2d63af121857a9/skills/gh-stack/SKILL.md
+  comparison-baseline: a1b4a3d4d0bcde9ec3a78ab99b2d63af121857a9
+  license: MIT
+  version: "0.0.9"
+  local-differences: Provenance metadata and per-skill LICENSE added.
 ---
+
 # gh-stack
 
 `gh stack` is a [GitHub CLI](https://cli.github.com/) extension for managing **stacked branches and pull requests**. A stack is an ordered list of branches where each branch builds on the one below it, rooted on a trunk branch (typically the repo's default branch). Each branch maps to one PR whose base is the branch below it, so reviewers see only the diff for that layer.

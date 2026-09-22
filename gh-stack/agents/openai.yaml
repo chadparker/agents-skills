@@ -1,0 +1,3 @@
+interface:
+  display_name: "gh-stack"
+  short_description: "Manage stacked branches and PRs"
