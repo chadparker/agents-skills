@@ -1,8 +1,8 @@
 # Shared agent skills
 
-Curated from [Matt Pocock's skills](https://github.com/mattpocock/skills).
+Curated from upstream sources, including [Matt Pocock's skills](https://github.com/mattpocock/skills) and [HumanLayer's skills](https://github.com/humanlayer/skills).
 
-Each skill's `SKILL.md` frontmatter records its provenance. Each folder includes its upstream `LICENSE`; see [pr/CREDITS.md](pr/CREDITS.md) for additional attribution.
+Each skill's `SKILL.md` frontmatter records its provenance. Each folder includes its upstream `LICENSE`; preserve any additional per-skill credits, such as [pr/CREDITS.md](pr/CREDITS.md).
 
 ## Maintenance
 
