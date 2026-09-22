@@ -1,6 +1,6 @@
 # Shared agent skills
 
-Curated from upstream sources, including [Matt Pocock's skills](https://github.com/mattpocock/skills) and [HumanLayer's skills](https://github.com/humanlayer/skills).
+Curated from upstream sources, including [Matt Pocock's skills](https://github.com/mattpocock/skills), [HumanLayer's skills](https://github.com/humanlayer/skills), and [Armin Ronacher's agent-stuff](https://github.com/mitsuhiko/agent-stuff).
 
 Each skill's `SKILL.md` frontmatter records its provenance. Each folder includes its upstream `LICENSE`; preserve any additional per-skill credits, such as [pr/CREDITS.md](pr/CREDITS.md).
 
