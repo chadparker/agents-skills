@@ -6,7 +6,7 @@ metadata:
   source: https://github.com/mattpocock/skills/blob/c55ee46073ed923f86ce59a5eb3b6d895095d1b7/skills/in-progress/pr/SKILL.md
   comparison-baseline: c55ee46073ed923f86ce59a5eb3b6d895095d1b7
   license: MIT
-  local-differences: Provenance metadata and per-skill LICENSE added; Merge Danger template also differs from baseline.
+  local-differences: Provenance metadata and per-skill LICENSE added.
   credits:
     skill: show-me
     author: Dex Horthy
@@ -28,8 +28,13 @@ Use this template for writing the PR body:
 
 ## Merge Danger
 
-**Door:** one-way or two-way
-**Blast Radius:** <potential ramifications of merge>
+**Door:** <one-way or two-way>
+
+<optional: description>
+
+**Blast Radius:** <one-word description>
+
+<optional: potential ramifications of merge>
 ```
 
 ## Sections
