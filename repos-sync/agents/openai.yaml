@@ -1,0 +1,5 @@
+interface:
+  display_name: "Repos Sync"
+  short_description: "Fetch and fast-forward a folder of repos"
+policy:
+  allow_implicit_invocation: false
