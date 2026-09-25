@@ -154,6 +154,41 @@ git(r, 'branch', '--set-upstream-to=origin/other')
 advance(r)
 register(r, 'skip: upstream origin/other')
 
+r = fixture('dirty-up-to-date')
+(r / 'tracked').write_text('local change\n')
+register(r, 'skip: not clean')
+
+r = fixture('operation-up-to-date')
+(r / '.git' / 'sequencer').mkdir()
+register(r, 'skip: not clean')
+
+r = fixture('ignored-collision')
+(r / '.git' / 'info' / 'exclude').write_text('local-secret\n')
+(r / 'local-secret').write_text('upstream contents\n')
+git(r, 'add', '-f', 'local-secret')
+tree = git(r, 'write-tree')
+commit = git(r, 'commit-tree', tree, '-p', 'HEAD', '-m', 'track previously ignored file')
+git(r, 'reset', 'HEAD', '--', 'local-secret')
+(r / 'local-secret').write_text('local contents must survive\n')
+git(r, 'push', 'origin', commit + ':refs/heads/main')
+register(r, 'PULL FAILED')
+
+# Reject invalid arguments before any fetch or merge can happen.
+for args in [('--dryrun', str(REPOS)), (str(REPOS), str(REPOS))]:
+    result = subprocess.run(['bash', SCRIPT, *args], env=ENV, text=True, capture_output=True)
+    assert result.returncode == 2, (args, result)
+    assert not result.stdout, result.stdout
+    for name, head in heads.items():
+        assert git(REPOS / name, 'rev-parse', 'HEAD') == head
+
+# An explicit option terminator allows directory names beginning with a dash.
+dash_root = ROOT / '-repos'
+dash_root.mkdir()
+result = subprocess.run(['bash', SCRIPT, '--', '-repos'], cwd=ROOT,
+                        env=ENV, text=True, capture_output=True)
+assert result.returncode == 0, result.stderr
+assert 'No git repos found' in result.stdout
+
 # Record all tracked/untracked working files and index bytes, including submodules.
 def snapshot(repo):
     files = {}
@@ -182,6 +217,8 @@ def run(dry):
     assert set(rows) == set(expected)
     for name, action in expected.items():
         desired = action.replace('pulled ', 'would pull ') if dry else action
+        if dry and name == 'ignored-collision':
+            desired = 'would pull 1'
         assert rows[name][-1] == desired, (name, rows[name], desired)
         head = git(REPOS / name, 'rev-parse', 'HEAD')
         assert head == (targets[name] if not dry and name in targets else heads[name]), name
@@ -207,4 +244,4 @@ for name in targets:
     heads[name] = targets[name]
 targets.clear()
 run(False)
-print('\nALL PASSED: 17 scenarios x 3 runs = 51 scenario checks')
+print(f'\nALL PASSED: {len(expected)} scenarios x 3 runs = {len(expected) * 3} scenario checks; argument validation passed')

@@ -16,15 +16,26 @@ set -u
 
 dry_run=0
 root=.
+root_set=0
+options=1
 for arg in "$@"; do
-  case "$arg" in
-    --dry-run|-n) dry_run=1 ;;
-    -h|--help) sed -n '2,/^$/s/^# \{0,1\}//p' "$0"; exit 0 ;;
-    *) root=$arg ;;
-  esac
+  if [ "$options" -eq 1 ]; then
+    case "$arg" in
+      --dry-run|-n) dry_run=1; continue ;;
+      -h|--help) sed -n '2,/^$/s/^# \{0,1\}//p' "$0"; exit 0 ;;
+      --) options=0; continue ;;
+      -*) printf 'Unknown option: %s\n' "$arg" >&2; exit 2 ;;
+    esac
+  fi
+  if [ "$root_set" -eq 1 ]; then
+    printf 'Only one directory argument is allowed.\n' >&2
+    exit 2
+  fi
+  root=$arg
+  root_set=1
 done
 
-cd "$root" || exit 1
+cd -- "$root" || exit 1
 
 repos=()
 for d in */; do
@@ -133,7 +144,7 @@ for d in "${repos[@]}"; do
   elif [ "$count_failed" -eq 1 ]; then
     action="skip: count failed"
   elif [ "$state" != clean ]; then
-    [ "$behind" -gt 0 ] && action="skip: not clean"
+    action="skip: not clean"
   elif [ "$up" = "no upstream" ]; then
     action="skip: no upstream"
   elif [ "$upref" != "refs/remotes/origin/$def" ]; then
@@ -143,7 +154,7 @@ for d in "${repos[@]}"; do
   elif [ "$behind" -gt 0 ]; then
     if [ $dry_run -eq 1 ]; then
       action="would pull $behind"
-    elif git -C "$d" merge --ff-only --quiet '@{u}' >"$tmp/$d.merge" 2>&1; then
+    elif git -C "$d" merge --ff-only --no-overwrite-ignore --quiet '@{u}' >"$tmp/$d.merge" 2>&1; then
       action="pulled $behind"
       up="+0/-0"
     else
